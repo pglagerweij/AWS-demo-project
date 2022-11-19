@@ -9,6 +9,12 @@ Sources:
 
 ETL:
 - Serverless functions: Lambda => to query API and save towards AWS (Dynamo or S3)
+- Spark using Glue
+
+End product:
+- Query from S3 with Athena (presto) + Visuals in Quicksight
+- ML pipeline + with model as endpoint (API)
+- Data as a service API
 
 Project description - build out:
 - 01: Infrastructure as code (IAC) project bootstrap with Terraform
@@ -21,9 +27,15 @@ Project description - build out:
 - 08: Setup 3 Spark processing Job with Glue that pre-processes data of Dynamo, S3 + RDS/Neptune => save towards S3- Perhaps also a Lambda to orchestrate various things in next step.
 - 09a: Orchestration of these 3 jobs with Airflow => Deploy airflow with managaged airflow (AWS) setup pipeline and GHA towards it
 - 09b: Same as a but with Step Functions?
-- 10: Query data with Athena from S3 and load into Quicksight
+
 
 Extension A (ML application)
 - 01: Feature store setup and pre-procesisng job (spark?)
 - 02: Model training pipeline (sagemaker pipeline) saving in model registry etc. (MLFLOW or standard sagemaker?)
 - 03: Model hosting on endpoint or something else?
+
+Extension B (Dashboard)
+- 01: Query data with Athena from S3 and load into Quicksight
+
+Extension C (Data as a Service):
+- 01: Make data avaialble through an API (API GATEWAY with some backend (lambda or..?))
