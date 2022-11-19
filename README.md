@@ -23,10 +23,11 @@ Project description - build out:
 - 04: Codeartifact setup and why you would want it => a pipeline packaging you code to your private (PIP) Artifact (CB or GHA)
 - 05: Python formatting with Black/Flake (PEP) (Pre-commit) and unit test (pytest) (integrated with 04 pipeline).  
 - 06: Pattern for variable load using a queue - Lambda to write to SQS, Lambda to pull async from SQS save to DynamoDB (3 tier web architecture with seperate scaling example)
-- 07: Data Cataloque and crawler (S3/dynamo and RDS), Flatfile CSV towards Postgres database (DMS => RDS) (or graph with Neptune?) 
-- 08: Setup 3 Spark processing Job with Glue that pre-processes data of Dynamo, S3 + RDS/Neptune => save towards S3- Perhaps also a Lambda to orchestrate various things in next step.
-- 09a: Orchestration of these 3 jobs with Airflow => Deploy airflow with managaged airflow (AWS) setup pipeline and GHA towards it
-- 09b: Same as a but with Step Functions?
+- 07: Streaming (Spark streaming or Kafka - TBD)
+- 08: Data Cataloque and crawler (S3/dynamo and RDS), Flatfile CSV towards Postgres database (DMS => RDS) (or graph with Neptune?) 
+- 09: Setup 3 Spark processing Job with Glue that pre-processes data of Dynamo, S3 + RDS/Neptune => save towards S3- Perhaps also a Lambda to orchestrate various things in next step.
+- 10a: Orchestration of these 3 jobs with Airflow => Deploy airflow with managaged airflow (AWS) setup pipeline and GHA towards it
+- 10b: Same as a but with Step Functions?
 
 
 Extension A (ML application)
