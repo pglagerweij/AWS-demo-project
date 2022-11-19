@@ -21,7 +21,9 @@ Project description - build out:
 - 08: Setup 3 Spark processing Job with Glue that pre-processes data of Dynamo, S3 + RDS/Neptune => save towards S3- Perhaps also a Lambda to orchestrate various things in next step.
 - 09a: Orchestration of these 3 jobs with Airflow => Deploy airflow with managaged airflow (AWS) setup pipeline and GHA towards it
 - 09b: Same as a but with Step Functions?
-Extension (ML application)
-- 11: Feature store setup and pre-procesisng job (spark?)
-- 12: Model training pipeline saving in model registry etc. (MLFLOW or standard sagemaker?)
-- 13: Model hosting on endpoint or something else?
+- 10: Query data with Athena from S3 and load into Quicksight
+
+Extension A (ML application)
+- 01: Feature store setup and pre-procesisng job (spark?)
+- 02: Model training pipeline (sagemaker pipeline) saving in model registry etc. (MLFLOW or standard sagemaker?)
+- 03: Model hosting on endpoint or something else?
