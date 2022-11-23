@@ -29,6 +29,12 @@ jobs:
         with:
           path: ~/.tflint.d/plugins
           key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}  
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
       - name: tflint
         uses: reviewdog/action-tflint@master
         with:
