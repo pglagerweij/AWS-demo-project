@@ -1,4 +1,4 @@
-resource "aws_dynamodb_table" "terraform-tst" {
+resource "aws_dynamodb_table" "terraform_tst" {
   name         = "tsttable"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
