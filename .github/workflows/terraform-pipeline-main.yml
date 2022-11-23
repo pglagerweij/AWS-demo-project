@@ -1,4 +1,4 @@
-name: terraform-pipeline
+name: terraform-pipeline-main
 
 # Controls when the workflow will run
 on:
