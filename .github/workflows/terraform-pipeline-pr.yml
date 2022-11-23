@@ -48,7 +48,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           filter_mode: "nofilter" # nofilter option checks all files, not just diff
-          # fail_on_error: true # fail action if errors are found
+          fail_on_error: true # fail action if errors are found
           level: info  # change to info for more information
           tflint_rulesets: "aws"
           working_directory: terraform
