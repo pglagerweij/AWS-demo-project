@@ -28,7 +28,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.tflint.d/plugins
-          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}  
+          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }} 
+      - name: Configure AWS credentials for PR role
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        if: github.event_name == 'pull_request'
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
+          role-session-name: github-demo
+          aws-region: ${{ env.AWS_REGION }} 
       - name: Terraform Init
         id: init
         run: terraform -chdir=terraform init
@@ -44,19 +51,6 @@ jobs:
           # fail_on_error: true # fail action if errors are found
           level: info  # change to info for more information
           working_directory: terraform
-      # - name: Configure AWS credentials for PR role
-      #   uses: aws-actions/configure-aws-credentials@v1.7.0
-      #   if: github.event_name == 'pull_request'
-      #   with:
-      #     role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
-      #     role-session-name: github-demo
-      #     aws-region: ${{ env.AWS_REGION }}
-      # - name: Terraform Init
-      #   id: init
-      #   run: terraform init
-      # - name: Terraform Validate
-      #   id: validate
-      #   run: terraform validate -no-color
       # - name: Terraform Plan
       #   id: plan
       #   if: github.event_name == 'pull_request'
