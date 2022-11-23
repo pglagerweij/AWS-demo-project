@@ -5,15 +5,11 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   pull_request:
     branches: [ main ]
-    paths: 
-    - terraform
-    - .github\workflows\terraform-pipeline-pr.yml
     
 env:
   AWS_REGION: eu-west-1
   AWS_ACCOUNT_ID: 613963413230
   PR_ROLE: oidc_ro  
-  MAIN_ROLE: oidc_rw
 
 permissions:
   id-token: write
@@ -27,19 +23,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Configure AWS credentials for PR role
-        uses: aws-actions/configure-aws-credentials@v1.6.1
+        uses: aws-actions/configure-aws-credentials@v1.7.0
         if: github.event_name == 'pull_request'
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
-          role-session-name: github-demo
-          aws-region: ${{ env.AWS_REGION }}
-      - name: Configure AWS credentials for main branch role
-        uses: aws-actions/configure-aws-credentials@v1.6.1
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.MAIN_ROLE }}
           role-session-name: github-demo
           aws-region: ${{ env.AWS_REGION }}
       - name: Terraform Init
@@ -102,7 +91,3 @@ jobs:
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1 
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
