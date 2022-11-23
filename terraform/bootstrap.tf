@@ -81,7 +81,7 @@ resource "aws_iam_policy" "github_readonly" {
   description = "Permissions to access state bucket and dynamo table"
   policy      = data.aws_iam_policy_document.github_readonly.json
 }
-  
+
 module "github_readonly" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "~> 5.8"
