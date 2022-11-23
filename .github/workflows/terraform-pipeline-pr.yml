@@ -24,11 +24,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Cache plugin dir
-        uses: actions/cache@v2
-        with:
-          path: ~/.tflint.d/plugins
-          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }} 
       - name: Configure AWS credentials for PR role
         uses: aws-actions/configure-aws-credentials@v1.7.0
         if: github.event_name == 'pull_request'
@@ -43,7 +38,7 @@ jobs:
         id: validate
         run: terraform -chdir=terraform validate -no-color
       - name: tflint
-        uses: reviewdog/action-tflint@master
+        uses: reviewdog/action-tflint@v1.17.2
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
