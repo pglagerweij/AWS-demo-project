@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "github_readonly" {
 }
 
 resource "aws_iam_policy" "github_readonly" {
-  name        = "github_terraform_readonly"
+  name        = "oidc_terraform_readonly"
   description = "Permissions to access state bucket and dynamo table"
   policy      = data.aws_iam_policy_document.github_readonly.json
 }
@@ -88,7 +88,7 @@ module "github_readonly" {
 
   create_role = true
 
-  role_name = "oidc_readonly"
+  role_name = "oidc_ro"
 
   tags = {
     Role = "role-with-oidc"
@@ -110,7 +110,7 @@ module "github_readwrite" {
 
   create_role = true
 
-  role_name = "oidc_readwrite"
+  role_name = "oidc_rw"
 
   tags = {
     Role = "role-with-oidc"
