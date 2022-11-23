@@ -39,16 +39,6 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform -chdir=terraform validate -no-color
-      - name: tflint
-        uses: reviewdog/action-tflint@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          filter_mode: "nofilter" # nofilter option checks all files, not just diff
-          fail_on_error: true # fail action if errors are found
-          level: info
-          tflint_rulesets: "aws"
-          working_directory: terraform
       - name: Terraform fmt
         id: fmt
         run: terraform -chdir=terraform fmt -check
