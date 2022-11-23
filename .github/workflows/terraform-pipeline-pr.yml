@@ -3,10 +3,6 @@ name: terraform-pipeline
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-    paths: 
-    - terraform
   pull_request:
     branches: [ main ]
     paths: 
@@ -14,9 +10,9 @@ on:
     
 env:
   AWS_REGION: eu-west-1
-  AWS_ACCOUNT_ID: <<ACCOUNT_ID>>
-  PR_ROLE: github_readonly  
-  MAIN_ROLE: github_readwrite
+  AWS_ACCOUNT_ID: 613963413230
+  PR_ROLE: oidc_ro  
+  MAIN_ROLE: oidc_rw
 
 permissions:
   id-token: write
