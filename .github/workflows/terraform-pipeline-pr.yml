@@ -29,18 +29,15 @@ jobs:
         with:
           path: ~/.tflint.d/plugins
           key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}  
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v2
+      - name: tflint
+        uses: reviewdog/action-tflint@master
         with:
-          tflint_version: v0.43.0
-      - name: Show version
-        run: cd terraform
-
-      - name: Init TFLint
-        run: tflint --init
-
-      - name: Run TFLint
-        run: tflint -f compact
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          filter_mode: "nofilter" # nofilter option checks all files, not just diff
+          # fail_on_error: true # fail action if errors are found
+          level: info  # change to info for more information
+          working_directory: terraform
       # - name: Configure AWS credentials for PR role
       #   uses: aws-actions/configure-aws-credentials@v1.7.0
       #   if: github.event_name == 'pull_request'
