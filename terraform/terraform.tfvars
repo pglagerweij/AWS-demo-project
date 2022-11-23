@@ -1,0 +1,5 @@
+region            = "eu-west-1"
+dynamo_table      = "terraform-lock"
+state_bucket_name = "pltest-state-bucket-613963413230"
+github_repo_name  = "AWS-DEMO-PROJECT"
+github_org_name   = "pglagerweij"
