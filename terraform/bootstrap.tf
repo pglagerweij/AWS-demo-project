@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "github_readonly" {
       "s3:GetObject",
       "s3:ListBucket"
     ]
-    resources = ["${module.s3_bucket.s3_bucket_arn}/*"]
+    resources = ["${module.s3_bucket.s3_bucket_arn}/aws-demo-project/*"]
   }
   statement {
     sid = "AllowDynamoDBActions"
