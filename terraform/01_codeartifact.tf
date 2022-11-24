@@ -63,5 +63,5 @@ data "aws_iam_policy_document" "github_codeartifact" {
 resource "aws_iam_policy" "github_codeartifact" {
   name        = "oidc_codeartifact_readonly"
   description = "Permissions to access state bucket and dynamo table"
-  policy      = data.aws_iam_policy_document.github_readonly.json
+  policy      = data.aws_iam_policy_document.github_codeartifact.json
 }
