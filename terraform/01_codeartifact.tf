@@ -20,7 +20,7 @@ resource "aws_codeartifact_repository" "upstream" {
   }
 }
 
-module "github_readonly" {
+module "github_codeartifact" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "~> 5.8"
 
