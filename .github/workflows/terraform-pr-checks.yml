@@ -83,16 +83,16 @@ jobs:
               issue_number: context.issue.number,
             })
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('TFlint')
+              return comment.user.type === 'Bot' && comment.body.includes('TFlint status')
             })
 
             // 2. Prepare format of the comment
-            const output = `#### TFlint 🖌\`${{ steps.tflint.outcome }}\`
+            const output = `#### TFlint status 🖌\`${{ steps.tflint.outcome }}\`
 
-            <details><summary>Show Plan</summary>
+            <details><summary>Show Tflint</summary>
 
             \`\`\`\n
-            ${process.env.PLAN}
+            ${{ steps.tflint.outputs.stdout }}
             \`\`\`
 
             </details>
