@@ -69,8 +69,9 @@ jobs:
         working-directory: terraform
         # run: echo "::set-output name=stdout::$(tflint -f compact)"
         run: |
+         TFLINT_OUTPUT=$(tflint -f compact)
          echo "TFLINT_OUTPUT<<EOF" >> $GITHUB_ENV
-         echo "$(tflint -f compact)" >> $GITHUB_ENV
+         echo "$TFLINT_OUTPUT" >> $GITHUB_ENV
          echo "EOF" >> $GITHUB_ENV
         continue-on-error: true
       - uses: actions/github-script@v6
