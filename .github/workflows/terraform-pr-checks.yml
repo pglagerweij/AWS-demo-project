@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
     - 'terraform/**'
-    - '.github\workflows\terraform-pr-checks.yml'
+    - '.github/workflows/terraform-pr-checks.yml'
 
 env:
   AWS_REGION: eu-west-1
