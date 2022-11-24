@@ -46,6 +46,7 @@ data "aws_iam_policy_document" "github_codeartifact" {
     sid = "CodeartifactActions"
     actions = [
       "codeartifact:GetAuthorizationToken",
+      "codeartifact:GetRepositoryEndpoint",
       "codeartifact:ReadFromRepository"
     ]
     resources = ["*"]
