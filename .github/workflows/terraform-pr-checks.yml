@@ -48,16 +48,16 @@ jobs:
         with:
           github_token: ${{ github.token }}
           tflint_version: latest
-      # - name: Configure AWS credentials for PR role
-      #   uses: aws-actions/configure-aws-credentials@v1-node16
-      #   if: github.event_name == 'pull_request'
-      #   with:
-      #     role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
-      #     role-session-name: github-demo
-      #     aws-region: ${{ env.AWS_REGION }} 
-      # - name: Terraform Init
-      #   id: init
-      #   run: terraform -chdir=terraform init
+      - name: Configure AWS credentials for PR role
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        if: github.event_name == 'pull_request'
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
+          role-session-name: github-demo
+          aws-region: ${{ env.AWS_REGION }} 
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=terraform init
       - name: Show version
         working-directory: terraform
         run: tflint --version
@@ -67,13 +67,11 @@ jobs:
       - name: Run TFLint
         id: tflint
         working-directory: terraform
-        # run: echo "::set-output name=stdout::$(tflint -f compact)"
-        #  echo "TFLINT_OUTPUT=$TFLINT_OUTPUT" >> $GITHUB_ENV
         run: |
           echo 'TFLINT_OUTPUT<<EOF' >> $GITHUB_ENV
-          tflint -f compact --force >> $GITHUB_ENV
+          tflint -f compact --module --force >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          tflint -f compact
+          tflint -f compact --module
         continue-on-error: true
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
