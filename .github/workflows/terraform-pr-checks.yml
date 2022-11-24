@@ -38,6 +38,8 @@ jobs:
     steps:
       - name: Clone repo
         uses: actions/checkout@v3 
+      - name: Add problem Matcher
+        run: echo "::add-matcher::.github/tflint-problem-matcher.json" 
       - name: Cache tflint plugin dir
         uses: actions/cache@v3
         with:
@@ -69,3 +71,5 @@ jobs:
         run: |
           cd terraform
           tflint -f compact
+      - name: Remove problem Matcher
+        run: echo "::remove-matcher owner=eslint-compact::"
