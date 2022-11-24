@@ -11,7 +11,7 @@ on:
 env:
   AWS_REGION: eu-west-1
   AWS_ACCOUNT_ID: 613963413230 
-  PR_ROLE: oidc_ro 
+  PR_ROLE: oidc_codeartifact_ro 
 
 permissions:
   id-token: write
