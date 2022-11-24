@@ -16,6 +16,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_github_codeartifact"></a> [github\_codeartifact](#module\_github\_codeartifact) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | ~> 5.8 |
 | <a name="module_github_readonly"></a> [github\_readonly](#module\_github\_readonly) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | ~> 5.8 |
 | <a name="module_github_readwrite"></a> [github\_readwrite](#module\_github\_readwrite) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | ~> 5.8 |
 | <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 3.6 |
@@ -29,7 +30,9 @@
 | [aws_codeartifact_repository.upstream](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codeartifact_repository) | resource |
 | [aws_dynamodb_table.terraform_lock](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 | [aws_iam_openid_connect_provider.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
+| [aws_iam_policy.github_codeartifact](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.github_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy_document.github_codeartifact](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.github_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
