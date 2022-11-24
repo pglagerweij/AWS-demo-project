@@ -40,7 +40,16 @@ jobs:
         run: |
           aws codeartifact login --tool pip --domain pltest-artifact --repository pltest-private-python
           pip install -r requirements.txt
-      - name: Build Package
+      - name: Run Pytest
         working-directory: python_packages/data-validation-helpers
         run: |
           pytest
+       - name: Build coverage file
+        working-directory: python_packages/data-validation-helpers
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@v1.1.37
+        with:
+          pytest-coverage-path: ./python_packages/data-validation-helpers/pytest-coverage.txt
+          junitxml-path: ./python_packages/data-validation-helpers/pytest.xml
