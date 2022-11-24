@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
+from version import __version__
 
-VERSION = '0.0.1' 
 DESCRIPTION = 'My first Python package'
 LONG_DESCRIPTION = 'My first Python package with a slightly longer description'
 
@@ -8,7 +8,7 @@ LONG_DESCRIPTION = 'My first Python package with a slightly longer description'
 setup(
        # the name must match the folder name 'verysimplemodule'
         name="data-validation-helpers", 
-        version=VERSION,
+        version=__version__,
         author="Pascal Lagerweij",
         author_email="plagerweij@email.com>",
         description=DESCRIPTION,
