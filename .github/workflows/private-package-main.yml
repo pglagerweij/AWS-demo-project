@@ -17,7 +17,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  terraform-pipeline:
+  private-python-package-pipeline:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
