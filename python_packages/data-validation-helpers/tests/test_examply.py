@@ -1,3 +1,6 @@
+import pytest
+from src.examply import add_one
+
 def test_empty():
     """
     PyTest tests are callables whose names start with "test"
@@ -8,9 +11,5 @@ def test_empty():
     pass
 
 
-def empty_test():
-    """
-    My name doesn't start with "test", so I won't get run.
-    (by default ;-)
-    """
-    pass
+def test_add_one():
+    assert add_one(1) == 2
