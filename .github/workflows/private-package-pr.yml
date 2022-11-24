@@ -40,10 +40,6 @@ jobs:
         run: |
           aws codeartifact login --tool pip --domain pltest-artifact --repository pltest-private-python
           pip install -r requirements.txt
-      - name: Run Pytest
-        working-directory: python_packages/data-validation-helpers
-        run: |
-          pytest
       - name: Build coverage file
         working-directory: python_packages/data-validation-helpers
         run: |
