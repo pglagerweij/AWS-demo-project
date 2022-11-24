@@ -65,9 +65,11 @@ jobs:
         working-directory: terraform
         run: tflint --init
       - name: Run TFLint
+        uses: mathiasvr/command-output@v1
         id: tflint
         working-directory: terraform
-        run: tflint -f compact
+        with:
+          run: tflint -f compact
         continue-on-error: true
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
