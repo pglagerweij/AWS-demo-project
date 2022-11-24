@@ -1,0 +1,51 @@
+name: private-package-pr
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the main branch
+  pull_request:
+    paths:
+    - 'python_packages/**'
+    - '.github/workflows/private-package-pr.yml'
+
+env:
+  AWS_REGION: eu-west-1
+  AWS_ACCOUNT_ID: 613963413230 
+  PR_ROLE: oidc_codeartifact_ro 
+
+permissions:
+  id-token: write
+  contents: read   
+  pull-requests: write
+
+jobs:
+  private-python-package-pipeline:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Configure AWS credentials for main branch role
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
+          role-session-name: package-to-codeartifact
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Install dependencies
+        working-directory: python_packages/data-validation-helpers
+        run: |
+          aws codeartifact login --tool pip --domain pltest-artifact --repository pltest-private-python
+          pip install -r requirements.txt
+      - name: Build coverage file
+        working-directory: python_packages/data-validation-helpers
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing --cov=src tests/ | tee pytest-coverage.txt
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@v1.1.37
+        with:
+          pytest-coverage-path: ./python_packages/data-validation-helpers/pytest-coverage.txt
+          junitxml-path: ./python_packages/data-validation-helpers/pytest.xml
