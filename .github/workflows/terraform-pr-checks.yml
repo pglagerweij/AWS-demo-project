@@ -38,13 +38,12 @@ jobs:
     steps:
       - name: Clone repo
         uses: actions/checkout@v3 
-      - name: Add problem Matcher
-        run: echo "::add-matcher::.github/tflint-problem-matcher.json" 
       - name: Cache tflint plugin dir
         uses: actions/cache@v3
+        working-directory: terraform
         with:
           path: ~/.tflint.d/plugins
-          key: terraform/ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
       - uses: terraform-linters/setup-tflint@v3
         name: Setup TFLint
         with:
@@ -60,16 +59,11 @@ jobs:
       #   id: init
       #   run: terraform -chdir=terraform init
       - name: Show version
-        run: |
-          cd terraform
-          tflint --version
+        working-directory: terraform
+        run: tflint --version
       - name: Init TFLint
-        run: |
-          cd terraform
-          tflint --init
+        working-directory: terraform
+        run: tflint --init
       - name: Run TFLint
-        run: |
-          cd terraform
-          tflint -f compact
-      - name: Remove problem Matcher
-        run: echo "::remove-matcher owner=eslint-compact::"
+        working-directory: terraform
+        run: tflint -f compact
