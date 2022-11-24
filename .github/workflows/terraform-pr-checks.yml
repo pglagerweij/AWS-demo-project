@@ -1,31 +1,53 @@
-name: terraform-pipeline-pr
-
-# Controls when the workflow will run
+name: tfchecks-pr-commenter
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   pull_request:
     paths:
     - 'terraform/**'
-    - '.github/workflows/terraform-pipeline-pr.yml'
-    
+    - '.github/workflows/terraform-pr-checks.yml'
+
 env:
   AWS_REGION: eu-west-1
   AWS_ACCOUNT_ID: 613963413230
-  PR_ROLE: oidc_ro  
-
-permissions:
-  id-token: write
-  contents: read   
-  pull-requests: write
+  PR_ROLE: oidc_ro
 
 jobs:
-  terraform-pipeline:
-    # The type of runner that the job will run on
+  tfsec:
+    name: tfsec PR commenter
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout
+      - name: Clone repo
         uses: actions/checkout@v3
+      - name: tfsec
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
+        with:
+          github_token: ${{ github.token }}
+          working_directory: 'terraform'
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3 
+      - name: Cache tflint plugin dir
+        uses: actions/cache@v3
+        with:
+          path: ~/.tflint.d/plugins
+          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+      - uses: terraform-linters/setup-tflint@v2
+        name: Setup TFLint
+        with:
+          github_token: ${{ github.token }}
+          tflint_version: latest
       - name: Configure AWS credentials for PR role
         uses: aws-actions/configure-aws-credentials@v1-node16
         if: github.event_name == 'pull_request'
@@ -33,29 +55,28 @@ jobs:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
           role-session-name: github-demo
           aws-region: ${{ env.AWS_REGION }} 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
       - name: Terraform Init
         id: init
         run: terraform -chdir=terraform init
-      - name: Terraform Validate
-        id: validate
-        run: terraform -chdir=terraform validate -no-color
-      - name: Terraform fmt
-        id: fmt
-        run: terraform -chdir=terraform fmt -check
+      - name: Show version
+        working-directory: terraform
+        run: tflint --version
+      - name: Init TFLint
+        working-directory: terraform
+        run: tflint --init
+      - name: Run TFLint
+        id: tflint
+        working-directory: terraform
+        run: |
+          echo 'TFLINT_OUTPUT<<EOF' >> $GITHUB_ENV
+          tflint -f compact --module --force >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          tflint -f compact --module
         continue-on-error: true
-      - name: Terraform Plan
-        id: plan
-        run: terraform -chdir=terraform plan -out tfplan
-        continue-on-error: true
-      - name: Terraform show
-        run: terraform -chdir=terraform show -no-color tfplan
-        id: show
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "${{ steps.show.outputs.stdout }}"
+          PLAN: "${{ env.TFLINT_OUTPUT }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -66,16 +87,13 @@ jobs:
               issue_number: context.issue.number,
             })
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
+              return comment.user.type === 'Bot' && comment.body.includes('TFlint status')
             })
 
             // 2. Prepare format of the comment
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            const output = `#### TFlint status 🖌\`${{ steps.tflint.outcome }}\`
 
-            <details><summary>Show Plan</summary>
+            <details><summary>Show Tflint</summary>
 
             \`\`\`\n
             ${process.env.PLAN}
@@ -83,7 +101,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             // 3. If we have a comment, update it, otherwise create a new one
             if (botComment) {
@@ -101,6 +119,6 @@ jobs:
                 body: output
               })
             }
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure' || steps.fmt.outcome == 'failure'
+      - name: Tflint Status
+        if: steps.tflint.outcome == 'failure'
         run: exit 1
