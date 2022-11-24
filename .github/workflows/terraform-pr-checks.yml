@@ -48,7 +48,7 @@ jobs:
       - uses: terraform-linters/setup-tflint@v3
         name: Setup TFLint
         with:
-        tflint_version: latest
+          tflint_version: latest
       - name: Configure AWS credentials for PR role
         uses: aws-actions/configure-aws-credentials@v1-node16
         if: github.event_name == 'pull_request'
