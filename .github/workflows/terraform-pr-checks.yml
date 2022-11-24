@@ -70,8 +70,9 @@ jobs:
         # run: echo "::set-output name=stdout::$(tflint -f compact)"
         #  echo "TFLINT_OUTPUT=$TFLINT_OUTPUT" >> $GITHUB_ENV
         run: |
-         TFLINT_OUTPUT=$(tflint -f compact --force)
-         echo "TFLINT_OUTPUT=$TFLINT_OUTPUT" >> $GITHUB_ENV
+         echo 'TFLINT_OUTPUT<<EOF' >> $GITHUB_ENV
+         tflint -f compact --force >> $GITHUB_ENV
+         echo 'EOF' >> $GITHUB_ENV
         continue-on-error: true
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
