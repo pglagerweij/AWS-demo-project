@@ -73,7 +73,7 @@ jobs:
           echo 'TFLINT_OUTPUT<<EOF' >> $GITHUB_ENV
           tflint -f compact --force >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          tflint -f compact
+          tflint --error-with-issues
         continue-on-error: true
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
