@@ -43,7 +43,7 @@ module "github_codeartifact" {
 
 data "aws_iam_policy_document" "github_codeartifact" {
   statement {
-    sid = "StateBucket"
+    sid = "CodeartifactActions"
     actions = [
       "codeartifact:GetAuthorizationToken",
       "codeartifact:ReadFromRepository"
@@ -51,13 +51,12 @@ data "aws_iam_policy_document" "github_codeartifact" {
     resources = ["*"]
   }
   statement {
-    sid = "Get token for codeartifact"
+    sid = "GetTokenforcodeartifact"
     actions = [
       "sts:GetServiceBearerToken",
     ]
     resources = ["*"]
   }
-
 }
 
 resource "aws_iam_policy" "github_codeartifact" {
