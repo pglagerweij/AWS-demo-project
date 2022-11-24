@@ -1,6 +1,15 @@
-name: tfsec-pr-commenter
+name: tfchecks-pr-commenter
 on:
   pull_request:
+    paths:
+    - terraform
+    - .github\workflows\tfsec.yml
+
+env:
+  AWS_REGION: eu-west-1
+  AWS_ACCOUNT_ID: 613963413230
+  PR_ROLE: oidc_ro
+
 jobs:
   tfsec:
     name: tfsec PR commenter
@@ -17,3 +26,32 @@ jobs:
         uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
         with:
           github_token: ${{ github.token }}
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials for PR role
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        if: github.event_name == 'pull_request'
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
+          role-session-name: github-demo
+          aws-region: ${{ env.AWS_REGION }} 
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=terraform init
+      - name: tflint
+        uses: reviewdog/action-tflint@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          working_directory: "terraform" # Optional. Change working directory
+          reporter: github-pr-review # Optional. Change reporter
+          fail_on_error: "true" # Optional. Fail action if errors are found
+          filter_mode: "nofilter" # Optional. Check all files, not just the diff
+          tflint_rulesets: "aws" # Optional. Extra official rulesets to install
