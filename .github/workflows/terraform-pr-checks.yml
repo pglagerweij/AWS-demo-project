@@ -40,7 +40,6 @@ jobs:
         uses: actions/checkout@v3 
       - name: Cache tflint plugin dir
         uses: actions/cache@v3
-        working-directory: terraform
         with:
           path: ~/.tflint.d/plugins
           key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
