@@ -11,7 +11,7 @@ on:
 env:
   AWS_REGION: eu-west-1
   AWS_ACCOUNT_ID: 613963413230 
-  MAIN_ROLE: oidc_rw
+  PR_ROLE: oidc_ro 
 
 permissions:
   id-token: write
@@ -31,9 +31,8 @@ jobs:
           python-version: '3.9'
       - name: Configure AWS credentials for main branch role
         uses: aws-actions/configure-aws-credentials@v1-node16
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.MAIN_ROLE }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
           role-session-name: package-to-codeartifact
           aws-region: ${{ env.AWS_REGION }}
       - name: Install dependencies
