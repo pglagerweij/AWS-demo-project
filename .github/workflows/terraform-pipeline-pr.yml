@@ -4,7 +4,9 @@ name: terraform-pipeline-pr
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   pull_request:
-    branches: [ main ]
+    paths:
+    - 'terraform/**'
+    - '.github/workflows/terraform-pipeline-pr.yml'
     
 env:
   AWS_REGION: eu-west-1
