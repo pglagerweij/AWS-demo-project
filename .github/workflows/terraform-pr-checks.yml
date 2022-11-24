@@ -50,7 +50,7 @@ jobs:
           github_token: ${{ github.token }}
           tflint_version: latest
       - name: Configure AWS credentials for PR role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v1.7.0
         if: github.event_name == 'pull_request'
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
