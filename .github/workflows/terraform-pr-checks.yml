@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
     - 'terraform/**'
+    - '!terraform/README.md'
     - '.github/workflows/terraform-pr-checks.yml'
 
 env:
