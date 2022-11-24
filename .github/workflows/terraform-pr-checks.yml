@@ -38,6 +38,17 @@ jobs:
     steps:
       - name: Clone repo
         uses: actions/checkout@v3
+      - name: Change to terraform dir
+        run: cd terraform  
+      - name: Cache tflint plugin dir
+        uses: actions/cache@v3
+        with:
+          path: ~/.tflint.d/plugins
+          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+      - uses: terraform-linters/setup-tflint@v3
+        name: Setup TFLint
+        with:
+        tflint_version: latest
       - name: Configure AWS credentials for PR role
         uses: aws-actions/configure-aws-credentials@v1-node16
         if: github.event_name == 'pull_request'
@@ -48,12 +59,9 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform -chdir=terraform init
-      - name: tflint
-        uses: reviewdog/action-tflint@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          working_directory: "./terraform" # Optional. Change working directory
-          reporter: github-pr-review # Optional. Change reporter
-          fail_on_error: "true" # Optional. Fail action if errors are found
-          filter_mode: "nofilter" # Optional. Check all files, not just the diff
-          tflint_rulesets: "aws" # Optional. Extra official rulesets to install
+      - name: Show version
+        run: tflint --version
+      - name: Init TFLint
+        run: tflint --init
+      - name: Run TFLint
+        run: tflint -f compact
