@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - 'terraform/**'
+      - '.github/workflows/terraform-pipeline-main.yml'
     
 env:
   AWS_REGION: eu-west-1
