@@ -75,7 +75,7 @@ jobs:
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "${{ steps.tflint.outputs.TFLINT_OUTPUT }}"
+          PLAN: "${{ env.TFLINT_OUTPUT }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
