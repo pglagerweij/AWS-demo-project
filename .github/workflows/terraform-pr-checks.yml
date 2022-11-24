@@ -71,7 +71,7 @@ jobs:
         #  echo "TFLINT_OUTPUT=$TFLINT_OUTPUT" >> $GITHUB_ENV
         run: |
          TFLINT_OUTPUT=$(tflint -f compact --force)
-         echo "TFLINT_OUTPUT=pascaltest" >> $GITHUB_ENV
+         echo "TFLINT_OUTPUT=$TFLINT_OUTPUT" >> $GITHUB_ENV
         continue-on-error: true
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
