@@ -16,6 +16,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_github_codeartifact"></a> [github\_codeartifact](#module\_github\_codeartifact) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | ~> 5.8 |
 | <a name="module_github_readonly"></a> [github\_readonly](#module\_github\_readonly) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | ~> 5.8 |
 | <a name="module_github_readwrite"></a> [github\_readwrite](#module\_github\_readwrite) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | ~> 5.8 |
 | <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 3.6 |
