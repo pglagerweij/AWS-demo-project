@@ -7,6 +7,6 @@ Project description - build out:
 Outcomes:
 01) Bootstrapped project with code in terraform directory - the bootstrap.tf file.
 02) In .github/workflows folder the 2 pipelines - terraform-pipeline-pr.yml and terraform-pipeline-main.yml
-03) Added terraform-pr-checks.yml pipeline with TFlint and TFsec - tf fmt is already in 02
+03) Added terraform-pr-checks.yml pipeline with TFlint and TFsec auto generated TFDocs readme - tf fmt is already in 02 - also added infracost
  
    
