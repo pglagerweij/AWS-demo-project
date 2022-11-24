@@ -67,12 +67,13 @@ jobs:
       - name: Run TFLint
         id: tflint
         working-directory: terraform
-        run: echo "::set-output name=stdout::$(tflint -f compact)"
+        # run: echo "::set-output name=stdout::$(tflint -f compact)"
+        run: echo "TFLINT_OUTPUT=$(tflint -f compact)" >> $GITHUB_ENV
         continue-on-error: true
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "${{ steps.tflint.outputs.stdout }}"
+          PLAN: "${{ steps.tflint.outputs.TFLINT_OUTPUT }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -92,7 +93,7 @@ jobs:
             <details><summary>Show Tflint</summary>
 
             \`\`\`\n
-            ${{ steps.tflint.outputs.stdout }}
+            ${process.env.PLAN}
             \`\`\`
 
             </details>
