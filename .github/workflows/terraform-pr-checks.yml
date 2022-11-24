@@ -70,9 +70,12 @@ jobs:
         # run: echo "::set-output name=stdout::$(tflint -f compact)"
         #  echo "TFLINT_OUTPUT=$TFLINT_OUTPUT" >> $GITHUB_ENV
         run: |
-         TFLINT_OUTPUT=$(tflint -f compact)
-         echo "TFLINT_OUTPUT=pascaltest" >> $GITHUB_ENV
+          echo "TFLINT_OUTPUT=pascaltest" >> $GITHUB_ENV
         continue-on-error: true
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.TFLINT_OUTPUT }}" # This will output 'yellow'
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
