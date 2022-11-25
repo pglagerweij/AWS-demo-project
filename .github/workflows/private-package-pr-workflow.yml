@@ -67,3 +67,4 @@ jobs:
         with:
           multiple-files: |
             ${{ inputs.working_directory }},  ./pytest-coverage.txt, ./pytest.xml
+            "test2",  ./pytest-coverage.txt, ./pytest.xml
