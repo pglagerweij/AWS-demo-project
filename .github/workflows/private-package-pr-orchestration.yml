@@ -8,11 +8,6 @@ on:
     - 'python_packages/**'
     - '.github/workflows/private-package-pr.yml'
 
-env:
-  AWS_REGION: eu-west-1
-  AWS_ACCOUNT_ID: 613963413230 
-  PR_ROLE: oidc_codeartifact_ro 
-
 permissions:
   id-token: write
   contents: read   
@@ -41,14 +36,15 @@ jobs:
       - name: Set matrix for next job
         id: set-matrix
         run: echo "matrix={\"dir_names\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
-      
+  
+  # Cannot pass in env variables in job.job_id.with. .. env not available https://github.com/actions/toolkit/issues/931 - docu here: https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability 
   build-packages:
     needs: [ determine-changes ]
     strategy:
       matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
     uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
     with:
-        aws_region: ${{ env.AWS_REGION }}
+        aws_region: eu-west-1
         aws_account_id: 613963413230    
         aws_role: oidc_codeartifact_ro
         working_directory: ${{ matrix.dir_names }}
