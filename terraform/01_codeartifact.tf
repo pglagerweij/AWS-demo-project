@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "github_codeartifact" {
       "sts:GetServiceBearerToken",
     ]
     resources = ["*"]
-    Condition {
+    condition {
       test     = "StringEquals"
       variable = "sts:AWSServiceName"
 
