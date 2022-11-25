@@ -52,9 +52,15 @@ module "github_codeartifact" {
 
 data "aws_iam_policy_document" "github_codeartifact" {
   statement {
+    sid = "CodeartifactDomainActions"
+    actions = [
+      "codeartifact:GetAuthorizationToken"
+    ]
+    resources = [aws_codeartifact_domain.private_pip_artifact.arn]
+  }
+  statement {
     sid = "CodeartifactActions"
     actions = [
-      "codeartifact:GetAuthorizationToken",
       "codeartifact:GetRepositoryEndpoint",
       "codeartifact:ReadFromRepository"
     ]
