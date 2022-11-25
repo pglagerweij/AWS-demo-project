@@ -44,7 +44,7 @@ jobs:
             echo "$file was changed"
             array+=($file)
           done
-          echo $array
+          echo ${array[@]}
       - name: output matrix
         id: matrix 
         run: |
