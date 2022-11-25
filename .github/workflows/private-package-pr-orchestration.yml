@@ -41,9 +41,12 @@ jobs:
             echo "$file was changed"
           done
   build-packages:
+    strategy:
+      matrix:
+        target: ['python_packages/data-testing', 'python_packages/data-validation-helpers']
     uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
     with:
         AWS_REGION: eu-west-1
         AWS_ACCOUNT_ID: 613963413230    
         AWS_ROLE: oidc_codeartifact_ro
-        working_directories: ['python_packages/data-testing', 'python_packages/data-validation-helpers']
+        working_directory: ${{ matrix.target }}
