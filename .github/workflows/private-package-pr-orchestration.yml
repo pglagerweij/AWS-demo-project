@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changed-dirs: ${{ steps.changed-files.outputs.all_changed_files }}
+      # matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -42,16 +43,24 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
-  build-packages:
-    needs: [ determine-changes ]
-    strategy:
-      matrix:
-        # target: ['python_packages/data-testing', 'python_packages/data-validation-helpers']
-        target: ${{ needs.determine-changes.outputs.changed-dirs }}
-    uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
-    with:
-        aws_region: eu-west-1
-        aws_account_id: 613963413230    
-        aws_role: oidc_codeartifact_ro
-        working_directory: ${{ matrix.target }}
-        python_version: '3.9'
+      - name: output matrix
+        id: matrix 
+        run: |
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
+          # matrix="$(cat */matrix | jq -c --slurp .)"
+          # echo "::set-output name=matrix::$matrix"
+        
+  # build-packages:
+  #   needs: [ determine-changes ]
+  #   strategy:
+  #     matrix:
+  #       # target: ['python_packages/data-testing', 'python_packages/data-validation-helpers']
+  #       # target: ${{ needs.determine-changes.outputs.changed-dirs }}
+  #       target: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
+  #   uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+  #   with:
+  #       aws_region: eu-west-1
+  #       aws_account_id: 613963413230    
+  #       aws_role: oidc_codeartifact_ro
+  #       working_directory: ${{ matrix.target }}
+  #       python_version: '3.9'
