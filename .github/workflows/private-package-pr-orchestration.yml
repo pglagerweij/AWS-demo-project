@@ -47,6 +47,8 @@ jobs:
           done
           echo ${array[@]}
           echo "matrix2={\"target\":${array[@]}}" >> $GITHUB_OUTPUT
+          echo $matrix2
+          echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
  
       # - name: output matrix
       #   id: matrix 
@@ -57,14 +59,14 @@ jobs:
       #     echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}" >> $GITHUB_OUTPUT
  
       
-  build-packages:
-    needs: [ determine-changes ]
-    strategy:
-      matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix2) }}
-    uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
-    with:
-        aws_region: eu-west-1
-        aws_account_id: 613963413230    
-        aws_role: oidc_codeartifact_ro
-        working_directory: ${{ matrix.target }}
-        python_version: '3.9'
+  # build-packages:
+  #   needs: [ determine-changes ]
+  #   strategy:
+  #     matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix2) }}
+  #   uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+  #   with:
+  #       aws_region: eu-west-1
+  #       aws_account_id: 613963413230    
+  #       aws_role: oidc_codeartifact_ro
+  #       working_directory: ${{ matrix.target }}
+  #       python_version: '3.9'
