@@ -45,7 +45,7 @@ jobs:
     uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
     with:
         aws_region: eu-west-1
-        aws_account_id: 613963413230    
+        aws_account_id: 994911977949    
         aws_role: oidc_codeartifact_ro
         working_directory: ${{ matrix.dir_names }}
         python_version: '3.9'

@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: eu-west-1
-  AWS_ACCOUNT_ID: 613963413230
+  AWS_ACCOUNT_ID: 994911977949
   PR_ROLE: oidc_ro
 
 jobs:
