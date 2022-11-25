@@ -46,7 +46,8 @@ jobs:
             array+=($file)
           done
           echo ${array[@]}
-          echo "matrix2={\"target\":${array[@]}}" >> $GITHUB_OUTPUT
+          matrix2={\"target\":${array[@]}}
+          echo $matrix2 >> $GITHUB_OUTPUT
           echo $matrix2
           echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
  
