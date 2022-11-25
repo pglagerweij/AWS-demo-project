@@ -1,4 +1,4 @@
-name: private-package-pr
+name: private-package-test-workflow
 
 # Controls when the workflow will run
 on:
