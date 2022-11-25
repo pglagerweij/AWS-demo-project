@@ -22,7 +22,7 @@ on:
 
 permissions:
   id-token: write
-  contents: read   
+  contents: write   
   pull-requests: write
 
 jobs:
@@ -33,6 +33,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0 
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ inputs.python_version }}
@@ -53,6 +55,7 @@ jobs:
           pytest --junitxml=pytest.xml --cov-report=term-missing --cov=${{ inputs.working_directory }}/src ${{ inputs.working_directory }}/tests/ | tee pytest-coverage.txt
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@v1.1.37
+        id: coverageComment
         with:
           title: ${{ inputs.working_directory }}
           pytest-coverage-path: ./pytest-coverage.txt

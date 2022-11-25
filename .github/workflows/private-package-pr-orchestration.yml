@@ -6,11 +6,12 @@ on:
   pull_request:
     paths:
     - 'python_packages/**'
+    - '!python_packages/**/README.md'
     - '.github/workflows/private-package-pr.yml'
 
 permissions:
   id-token: write
-  contents: read   
+  contents: write   
   pull-requests: write
 
 jobs:

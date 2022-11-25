@@ -7,7 +7,7 @@ with open('LICENSE') as f:
 setup(
        # the name must match the folder name 'verysimplemodule'
         name="data-testing", 
-        version="0.0.1",
+        version="0.0.2",
         author="Pascal Lagerweij",
         author_email="plagerweij@email.com>",
         description="short description",
