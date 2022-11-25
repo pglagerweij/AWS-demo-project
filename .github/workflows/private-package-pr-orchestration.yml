@@ -40,10 +40,10 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
-    build-packages:
-        uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
-        with:
-            AWS_REGION:  ${{ env.AWS_REGION }}
-            AWS_ACCOUNT_ID:  ${{ env.AWS_ACCOUNT_ID }}     
-            AWS_ROLE:  ${{ env.PR_ROLE }}
-            working_directory: 'python_packages\data-testing'
+  build-packages:
+    uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+    with:
+        AWS_REGION:  ${{ env.AWS_REGION }}
+        AWS_ACCOUNT_ID:  ${{ env.AWS_ACCOUNT_ID }}     
+        AWS_ROLE:  ${{ env.PR_ROLE }}
+        working_directory: 'python_packages\data-testing'
