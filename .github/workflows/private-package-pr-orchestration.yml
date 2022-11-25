@@ -26,12 +26,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: Stockopedia/action-get-changed-files@v1
-        id: get_changed
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          ignore: "**/+(.github)"
-          foldersOnly: true 
-          format: csv
-      - name: Echo changed files
-        run: echo ${{ steps.get_changed.outputs.changed }}
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v34
+        with:
+          path: python_packages
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
