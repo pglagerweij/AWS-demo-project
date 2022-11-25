@@ -36,20 +36,21 @@ jobs:
         uses: tj-actions/changed-files@v34
         with:
           files: python_packages/**
-          separator: ","
+          json: "true"
           dir_names: "true"
           dir_names_max_depth: 2
       - name: List all changed files
         id: matrix
         run: |
-          input=${{ steps.changed-files.outputs.all_changed_files }}
-          array="$(echo $input | sed 's/\,/"\,"/g')"
-          echo $array
-          matrix2={\"target\":[\"${array}\"]}
-          echo "matrix=$matrix2" >> $GITHUB_OUTPUT
-          echo "matrix=$matrix2"
-          echo "test={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
- 
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
+
+      # array="$(echo $input | sed 's/\,/"\,"/g')"
+      #     echo $array
+      #     matrix2={\"target\":[\"${array}\"]}
+      #     echo "matrix=$matrix2" >> $GITHUB_OUTPUT
+      #     echo "matrix=$matrix2"
+      #     echo "test={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
+     
       # - name: output matrix
       #   id: matrix 
       #   run: |
@@ -59,14 +60,14 @@ jobs:
       #     echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}" >> $GITHUB_OUTPUT
  
       
-  build-packages:
-    needs: [ determine-changes ]
-    strategy:
-      matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
-    uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
-    with:
-        aws_region: eu-west-1
-        aws_account_id: 613963413230    
-        aws_role: oidc_codeartifact_ro
-        working_directory: ${{ matrix.target }}
-        python_version: '3.9'
+  # build-packages:
+  #   needs: [ determine-changes ]
+  #   strategy:
+  #     matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
+  #   uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+  #   with:
+  #       aws_region: eu-west-1
+  #       aws_account_id: 613963413230    
+  #       aws_role: oidc_codeartifact_ro
+  #       working_directory: ${{ matrix.target }}
+  #       python_version: '3.9'
