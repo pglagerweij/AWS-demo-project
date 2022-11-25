@@ -1,5 +1,5 @@
-resource "aws_dynamodb_table" "terraform-test" {
-  name                  = "test-table"
+resource "aws_dynamodb_table" "terraform_test" {
+  name         = "test-table"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
