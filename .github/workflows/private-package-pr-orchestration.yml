@@ -45,10 +45,10 @@ jobs:
           input=${{ steps.changed-files.outputs.all_changed_files }}
           array="$(echo $input | sed 's/\,/"\,"/g')"
           echo $array
-          matrix={\"target\":[\"${array}\"]}
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
-          echo $matrix
-          echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
+          matrix=2{\"target\":[\"${array}\"]}
+          echo "matrix=$matrix2" >> $GITHUB_OUTPUT
+          echo "matrix=$matrix2"
+          echo "test={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
  
       # - name: output matrix
       #   id: matrix 
