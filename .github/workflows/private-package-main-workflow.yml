@@ -1,19 +1,25 @@
-name: private-package-main
+name: private-package-build-workflow
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events but only for the main branch
-  push:
-    branches: 
-      - main
-    paths:
-      - 'python_packages/data-validation-helpers/**'
+  workflow_call:
+    inputs:
+      aws_region:
+        required: true
+        type: string
+      aws_account_id:
+        required: true
+        type: string
+      aws_role:
+        required: true
+        type: string
+      working_directory:
+        required: true
+        type: string
+      python_version:
+        required: true
+        type: string
     
-env:
-  AWS_REGION: eu-west-1
-  AWS_ACCOUNT_ID: 613963413230 
-  MAIN_ROLE: oidc_rw
-
 permissions:
   id-token: write
   contents: read   
@@ -29,26 +35,26 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: ${{ inputs.python_version }}
       - name: Configure AWS credentials for main branch role
         uses: aws-actions/configure-aws-credentials@v1-node16
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.MAIN_ROLE }}
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role }}
           role-session-name: package-to-codeartifact
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ inputs.aws_region }}
       - name: Install dependencies
-        working-directory: python_packages/data-validation-helpers
+        working-directory: ${{ inputs.working_directory }}
         run: |
           python -m pip install --upgrade pip
           pip install wheel twine
           pip install -r requirements.txt
       - name: Build Package
-        working-directory: python_packages/data-validation-helpers
+        working-directory: ${{ inputs.working_directory }}
         run: |
           python setup.py sdist bdist_wheel
       - name: Publish Package
-        working-directory: python_packages/data-validation-helpers
+        working-directory: ${{ inputs.working_directory }}
         run: |
           aws codeartifact login --tool twine --domain 	pltest-artifact --repository pltest-private-python
           twine upload --repository codeartifact dist/*

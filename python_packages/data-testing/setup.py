@@ -6,8 +6,8 @@ with open('LICENSE') as f:
 # Setting up
 setup(
        # the name must match the folder name 'verysimplemodule'
-        name="data-validation-helpers", 
-        version="0.0.2",
+        name="data-testing", 
+        version="0.0.1",
         author="Pascal Lagerweij",
         author_email="plagerweij@email.com>",
         description="short description",

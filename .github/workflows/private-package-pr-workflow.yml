@@ -1,17 +1,24 @@
-name: private-package-pr
+name: private-package-test-workflow
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events but only for the main branch
-  pull_request:
-    paths:
-    - 'python_packages/**'
-    - '.github/workflows/private-package-pr.yml'
-
-env:
-  AWS_REGION: eu-west-1
-  AWS_ACCOUNT_ID: 613963413230 
-  PR_ROLE: oidc_codeartifact_ro 
+  workflow_call:
+    inputs:
+      aws_region:
+        required: true
+        type: string
+      aws_account_id:
+        required: true
+        type: string
+      aws_role:
+        required: true
+        type: string
+      working_directory:
+        required: true
+        type: string
+      python_version:
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -28,25 +35,25 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: ${{ inputs.python_version }}
       - name: Configure AWS credentials for main branch role
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role }}
           role-session-name: package-to-codeartifact
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ inputs.aws_region }}
       - name: Install dependencies
-        working-directory: python_packages/data-validation-helpers
+        working-directory: ${{ inputs.working_directory }}
         run: |
           aws codeartifact login --tool pip --domain pltest-artifact --repository pltest-pip-store
           pip install pytest pytest-cov
           pip install -r requirements.txt
       - name: Build coverage file
-        working-directory: python_packages/data-validation-helpers
         run: |
-          pytest --junitxml=pytest.xml --cov-report=term-missing --cov=src tests/ | tee pytest-coverage.txt
+          pytest --junitxml=pytest.xml --cov-report=term-missing --cov=${{ inputs.working_directory }}/src ${{ inputs.working_directory }}/tests/ | tee pytest-coverage.txt
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@v1.1.37
         with:
-          pytest-coverage-path: ./python_packages/data-validation-helpers/pytest-coverage.txt
-          junitxml-path: ./python_packages/data-validation-helpers/pytest.xml
+          title: ${{ inputs.working_directory }}
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
