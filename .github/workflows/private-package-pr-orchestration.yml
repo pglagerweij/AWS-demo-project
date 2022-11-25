@@ -46,4 +46,4 @@ jobs:
         AWS_REGION: eu-west-1
         AWS_ACCOUNT_ID: 613963413230    
         AWS_ROLE: oidc_codeartifact_ro
-        working_directory: 'python_packages\data-testing'
+        working_directory: 'python_packages/data-testing'
