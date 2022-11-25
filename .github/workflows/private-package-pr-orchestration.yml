@@ -56,10 +56,7 @@ jobs:
   build-packages:
     needs: [ determine-changes ]
     strategy:
-      matrix:
-        # target: ['python_packages/data-testing', 'python_packages/data-validation-helpers']
-        # target: ${{ needs.determine-changes.outputs.changed-dirs }}
-        target: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
     uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
     with:
         aws_region: eu-west-1
