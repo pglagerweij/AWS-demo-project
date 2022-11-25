@@ -36,17 +36,13 @@ jobs:
         uses: tj-actions/changed-files@v34
         with:
           files: python_packages/**
+          separator: ","
           dir_names: "true"
           dir_names_max_depth: 2
       - name: List all changed files
         id: matrix2
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-            array+=($file)
-          done
-          echo ${array[@]}
-          matrix2={\"target\":${array[@]}}
+          matrix2={\"target\":[${{ steps.changed-files.outputs.all_changed_files }}]}
           echo $matrix2 >> $GITHUB_OUTPUT
           echo $matrix2
           echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
