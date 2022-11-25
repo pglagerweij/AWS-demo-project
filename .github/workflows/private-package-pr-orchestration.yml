@@ -25,6 +25,7 @@ jobs:
     outputs:
       changed-dirs: ${{ steps.changed-files.outputs.all_changed_files }}
       matrix: ${{ steps.matrix.outputs.matrix }}
+      matrix2: ${{ steps.matrix2.outputs.matrix2 }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -39,12 +40,15 @@ jobs:
           dir_names: "true"
           dir_names_max_depth: 2
       - name: List all changed files
+        id: matrix2
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
             array+=($file)
           done
           echo ${array[@]}
+          echo "matrix2={\"target\":${array[@]}}" >> $GITHUB_OUTPUT
+ 
       - name: output matrix
         id: matrix 
         run: |
@@ -57,7 +61,7 @@ jobs:
   # build-packages:
   #   needs: [ determine-changes ]
   #   strategy:
-  #     matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
+  #     matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix2) }}
   #   uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
   #   with:
   #       aws_region: eu-west-1
