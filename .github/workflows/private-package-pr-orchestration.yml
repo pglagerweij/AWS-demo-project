@@ -38,23 +38,9 @@ jobs:
           json: "true"
           dir_names: "true"
           dir_names_max_depth: 2
-      - id: set-matrix
-        run: echo "matrix={\"target\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
-      # array="$(echo $input | sed 's/\,/"\,"/g')"
-      #     echo $array
-      #     matrix2={\"target\":[\"${array}\"]}
-      #     echo "matrix=$matrix2" >> $GITHUB_OUTPUT
-      #     echo "matrix=$matrix2"
-      #     echo "test={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
-     
-      # - name: output matrix
-      #   id: matrix 
-      #   run: |
-      #     echo ${{ steps.changed-files.outputs.all_changed_files }}
-      #     arr=(${{ steps.changed-files.outputs.all_changed_files }})
-      #     echo $arr
-      #     echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}" >> $GITHUB_OUTPUT
- 
+      - name: Set matrix for next job
+        id: set-matrix
+        run: echo "matrix={\"dir_names\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
       
   build-packages:
     needs: [ determine-changes ]
@@ -62,8 +48,8 @@ jobs:
       matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
     uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
     with:
-        aws_region: eu-west-1
+        aws_region: ${{ env.AWS_REGION }}
         aws_account_id: 613963413230    
         aws_role: oidc_codeartifact_ro
-        working_directory: ${{ matrix.target }}
+        working_directory: ${{ matrix.dir_names }}
         python_version: '3.9'
