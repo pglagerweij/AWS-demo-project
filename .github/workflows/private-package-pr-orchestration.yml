@@ -6,7 +6,6 @@ on:
   pull_request:
     paths:
     - 'python_packages/**'
-    - '!python_packages/**/README.md'
     - '.github/workflows/private-package-pr.yml'
 
 permissions:
