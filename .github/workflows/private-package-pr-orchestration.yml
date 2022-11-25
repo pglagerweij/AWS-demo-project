@@ -47,9 +47,9 @@ jobs:
         id: matrix 
         run: |
           echo ${{ steps.changed-files.outputs.all_changed_files }}
-          # matrix="$(cat */matrix | jq -c --slurp .)"
-          # echo "::set-output name=matrix::$matrix"
-        
+ 
+  # matrix="$(cat */matrix | jq -c --slurp .)"
+# echo "::set-output name=matrix::$matrix"      
   # build-packages:
   #   needs: [ determine-changes ]
   #   strategy:
