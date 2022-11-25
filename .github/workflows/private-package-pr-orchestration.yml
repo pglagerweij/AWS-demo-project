@@ -46,7 +46,7 @@ jobs:
           array="$(echo $input | sed 's/\,/"\,"/g')"
           echo $array
           matrix2={\"target\":[\"${array}\"]}
-          echo $matrix2 >> $GITHUB_OUTPUT
+          echo "matrix=$matrix2" >> $GITHUB_OUTPUT
           echo $matrix2
           echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
  
