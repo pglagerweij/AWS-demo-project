@@ -26,7 +26,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Configure AWS credentials for main branch role
@@ -39,6 +39,7 @@ jobs:
         working-directory: python_packages/data-validation-helpers
         run: |
           aws codeartifact login --tool pip --domain pltest-artifact --repository pltest-private-python
+          pip install pytest pytest-cov
           pip install -r requirements.txt
       - name: Build coverage file
         working-directory: python_packages/data-validation-helpers
