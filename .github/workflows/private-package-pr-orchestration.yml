@@ -47,3 +47,10 @@ jobs:
         AWS_ACCOUNT_ID: 613963413230    
         AWS_ROLE: oidc_codeartifact_ro
         working_directory: 'python_packages/data-testing'
+  build-packages-2:
+    uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+    with:
+        AWS_REGION: eu-west-1
+        AWS_ACCOUNT_ID: 613963413230    
+        AWS_ROLE: oidc_codeartifact_ro
+        working_directory: 'python_packages/data-validation-helpers'
