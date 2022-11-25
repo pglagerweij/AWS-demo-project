@@ -42,7 +42,7 @@ jobs:
       - name: List all changed files
         id: matrix2
         run: |
-          array=${{ steps.changed-files.outputs.all_changed_files }} | sed 's/\,/\./g' 
+          array=${{ steps.changed-files.outputs.all_changed_files }} | sed 's/\,/\\"\,\\"/g'
           echo $array
           matrix2={\"target\":[\"${array}\"]}
           echo $matrix2 >> $GITHUB_OUTPUT
