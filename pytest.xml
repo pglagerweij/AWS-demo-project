@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="2" time="0.091" timestamp="2022-11-25T15:59:27.326094" hostname="fv-az396-729"><testcase classname="tests.test_examply" name="test_empty" time="0.002" /><testcase classname="tests.test_examply" name="test_add_one" time="0.001" /></testsuite></testsuites>
