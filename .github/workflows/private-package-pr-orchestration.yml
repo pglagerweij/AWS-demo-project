@@ -42,7 +42,8 @@ jobs:
       - name: List all changed files
         id: matrix2
         run: |
-          matrix2={\"target\":[${{ steps.changed-files.outputs.all_changed_files }}]}
+          array=${{ steps.changed-files.outputs.all_changed_files }} | sed 's/,/,/g;s/\",\"$/\n/'
+          matrix2={\"target\":[\"${array}\"]}
           echo $matrix2 >> $GITHUB_OUTPUT
           echo $matrix2
           echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
