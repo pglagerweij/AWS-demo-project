@@ -39,14 +39,8 @@ jobs:
           json: "true"
           dir_names: "true"
           dir_names_max_depth: 2
-      - name: List all changed files
-        id: matrix
-        run: |
-          echo ${{ steps.changed-files.outputs.all_changed_files }}
-          echo "matrix={\"target\":${{ steps.changed-files.outputs.all_changed_files }}}"
-          echo "matrix={\"target\":${{ steps.changed-files.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
-          echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}" >> $GITHUB_OUTPUT
-
+      - id: set-matrix
+        run: echo "matrix={\"target\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
       # array="$(echo $input | sed 's/\,/"\,"/g')"
       #     echo $array
       #     matrix2={\"target\":[\"${array}\"]}
@@ -66,8 +60,7 @@ jobs:
   build-packages:
     needs: [ determine-changes ]
     strategy:
-      matrix: 
-        target: ${{ needs.determine-changes.outputs.changed-dirs }}
+      matrix: ${{ fromJSON(needs.determine-changes.outputs.changed-dirs) }}
     uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
     with:
         aws_region: eu-west-1
