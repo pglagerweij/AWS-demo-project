@@ -2,6 +2,15 @@ resource "aws_codeartifact_domain" "private_pip_artifact" {
   domain = "pltest-artifact"
 }
 
+resource "aws_codeartifact_repository" "pip_usage" {
+  repository = "pltest-pip-store"
+  domain     = aws_codeartifact_domain.private_pip_artifact.domain
+
+  upstream {
+    repository_name = aws_codeartifact_repository.pip_store.repository
+  }
+}
+
 resource "aws_codeartifact_repository" "pip_store" {
   repository = "pltest-private-python"
   domain     = aws_codeartifact_domain.private_pip_artifact.domain
@@ -12,7 +21,7 @@ resource "aws_codeartifact_repository" "pip_store" {
 }
 
 resource "aws_codeartifact_repository" "upstream" {
-  repository = "pltest-pip"
+  repository = "pltest-public-pip"
   domain     = aws_codeartifact_domain.private_pip_artifact.domain
 
   external_connections {
@@ -49,7 +58,7 @@ data "aws_iam_policy_document" "github_codeartifact" {
       "codeartifact:GetRepositoryEndpoint",
       "codeartifact:ReadFromRepository"
     ]
-    resources = ["*"]
+    resources = [aws_codeartifact_repository.pip_usage.arn]
   }
   statement {
     sid = "GetTokenforcodeartifact"
@@ -57,6 +66,14 @@ data "aws_iam_policy_document" "github_codeartifact" {
       "sts:GetServiceBearerToken",
     ]
     resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "sts:AWSServiceName"
+
+      values = [
+        "codeartifact.amazonaws.com",
+      ]
+    }
   }
 }
 
