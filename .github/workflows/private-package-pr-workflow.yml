@@ -60,14 +60,3 @@ jobs:
           title: ${{ inputs.working_directory }}
           pytest-coverage-path: ./pytest-coverage.txt
           junitxml-path: ./pytest.xml
-      - name: Update Readme with Coverage Html
-        working-directory: ${{ inputs.working_directory }}
-        run: |
-          sed -i '/<!-- Pytest Coverage Comment:Begin -->/,/<!-- Pytest Coverage Comment:End -->/c\<!-- Pytest Coverage Comment:Begin -->\n\${{ steps.coverageComment.outputs.coverageHtml }}\n<!-- Pytest Coverage Comment:End -->' ./README.md
-      - name: Commit & Push changes to Readme
-        uses: actions-js/push@master
-        with:
-          branch: ${{ github.head_ref }}
-          directory: ${{ inputs.working_directory }}
-          message: Update coverage on Readme
-          github_token: ${{ secrets.GITHUB_TOKEN }}
