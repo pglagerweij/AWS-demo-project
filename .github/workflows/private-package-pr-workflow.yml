@@ -33,8 +33,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          persist-credentials: false 
+        with: 
           fetch-depth: 0 
       - uses: actions/setup-python@v4
         with:
