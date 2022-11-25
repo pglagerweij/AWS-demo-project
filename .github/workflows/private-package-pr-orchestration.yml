@@ -49,7 +49,7 @@ jobs:
           echo ${{ steps.changed-files.outputs.all_changed_files }}
           arr=(${{ steps.changed-files.outputs.all_changed_files }})
           echo $arr
-          echo "matrix={\"project\":\"python_packages/data-testing\",\"project\":\"python_packages/data-validation-helpers\"}" >> $GITHUB_OUTPUT
+          echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
  
   # matrix="$(cat */matrix | jq -c --slurp .)"
 # echo "::set-output name=matrix::$matrix"      
