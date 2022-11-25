@@ -65,6 +65,6 @@ jobs:
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@v1.1.37
         with:
-          multiple-files: |
-            ${{ inputs.working_directory }},  ./pytest-coverage.txt, ./pytest.xml
-            "test2",  ./pytest-coverage.txt, ./pytest.xml
+          title: ${{ inputs.working_directory }}
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
