@@ -1,5 +1,5 @@
 import pytest
-from src.examply import add_one
+from src.examply import add_one, minus_one
 
 def test_empty():
     """
@@ -13,3 +13,6 @@ def test_empty():
 
 def test_add_one():
     assert add_one(1) == 2
+
+def test_minus_one():
+    assert minus_one(2) == 1
