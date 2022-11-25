@@ -2,17 +2,25 @@ name: private-package-pr
 
 # Controls when the workflow will run
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      AWS_REGION:
+        required: true
+        type: string
+      AWS_ACCOUNT_ID:
+        required: true
+        type: string
+      AWS_ROLE:
+        required: true
+        type: string
+      working_directory:
+        required: true
+        type: string
 #   # Triggers the workflow on push events but only for the main branch
 #   pull_request:
 #     paths:
 #     - 'python_packages/**'
 #     - '.github/workflows/private-package-pr.yml'
-
-env:
-  AWS_REGION: eu-west-1
-  AWS_ACCOUNT_ID: 613963413230 
-  PR_ROLE: oidc_codeartifact_ro 
 
 permissions:
   id-token: write
@@ -33,21 +41,21 @@ jobs:
       - name: Configure AWS credentials for main branch role
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.PR_ROLE }}
+          role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT_ID }}:role/${{ inputs.AWS_ROLE }}
           role-session-name: package-to-codeartifact
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ inputs.AWS_REGION }}
       - name: Install dependencies
-        working-directory: python_packages/data-validation-helpers
+        working-directory: ${{ inputs.working_directory }}
         run: |
           aws codeartifact login --tool pip --domain pltest-artifact --repository pltest-pip-store
           pip install pytest pytest-cov
           pip install -r requirements.txt
       - name: Build coverage file
-        working-directory: python_packages/data-validation-helpers
+        working-directory: ${{ inputs.working_directory }}
         run: |
           pytest --junitxml=pytest.xml --cov-report=term-missing --cov=src tests/ | tee pytest-coverage.txt
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@v1.1.37
         with:
-          pytest-coverage-path: ./python_packages/data-validation-helpers/pytest-coverage.txt
-          junitxml-path: ./python_packages/data-validation-helpers/pytest.xml
+          pytest-coverage-path: ./${{ inputs.working_directory }}/pytest-coverage.txt
+          junitxml-path: ./${{ inputs.working_directory }}/pytest.xml
