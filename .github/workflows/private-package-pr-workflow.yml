@@ -67,7 +67,7 @@ jobs:
       - name: Commit & Push changes to Readme
         uses: actions-js/push@master
         with:
-          branch: ${{ github.ref_name }}
+          branch: ${{ github.head_ref }}
           directory: ${{ inputs.working_directory }}
           message: Update coverage on Readme
           github_token: ${{ secrets.GITHUB_TOKEN }}
