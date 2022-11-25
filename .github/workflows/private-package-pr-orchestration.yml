@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changed-dirs: ${{ steps.changed-files.outputs.all_changed_files }}
-      matrix2: ${{ steps.matrix2.outputs.matrix2 }}
+      matrix2: ${{ steps.matrix.outputs.matrix }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -40,14 +40,14 @@ jobs:
           dir_names: "true"
           dir_names_max_depth: 2
       - name: List all changed files
-        id: matrix2
+        id: matrix
         run: |
           input=${{ steps.changed-files.outputs.all_changed_files }}
           array="$(echo $input | sed 's/\,/"\,"/g')"
           echo $array
-          matrix2={\"target\":[\"${array}\"]}
-          echo "matrix=$matrix2" >> $GITHUB_OUTPUT
-          echo $matrix2
+          matrix={\"target\":[\"${array}\"]}
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+          echo $matrix
           echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}"
  
       # - name: output matrix
@@ -59,14 +59,14 @@ jobs:
       #     echo "matrix={\"target\":[\"python_packages/data-testing\",\"python_packages/data-validation-helpers\"]}" >> $GITHUB_OUTPUT
  
       
-  # build-packages:
-  #   needs: [ determine-changes ]
-  #   strategy:
-  #     matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix2) }}
-  #   uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
-  #   with:
-  #       aws_region: eu-west-1
-  #       aws_account_id: 613963413230    
-  #       aws_role: oidc_codeartifact_ro
-  #       working_directory: ${{ matrix.target }}
-  #       python_version: '3.9'
+  build-packages:
+    needs: [ determine-changes ]
+    strategy:
+      matrix: ${{ fromJSON(needs.determine-changes.outputs.matrix) }}
+    uses: ./.github/workflows/private-package-pr-workflow.yml # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+    with:
+        aws_region: eu-west-1
+        aws_account_id: 613963413230    
+        aws_role: oidc_codeartifact_ro
+        working_directory: ${{ matrix.target }}
+        python_version: '3.9'
