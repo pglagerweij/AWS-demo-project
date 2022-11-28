@@ -88,12 +88,12 @@ jobs:
         run: terraform -chdir=terraform apply -auto-approve
   post-message:
     runs-on: ubuntu-latest
+    environment: main
     needs: [terraform-pipeline, tfsec, generate-terraform-docs]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Microsoft Teams Notification
-        env: main
         uses: skitionek/notify-microsoft-teams@master
         if: always()
         with:
