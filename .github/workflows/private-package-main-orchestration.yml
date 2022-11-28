@@ -51,5 +51,21 @@ jobs:
         aws_role: oidc_rw
         working_directory: ${{ matrix.dir_names }}
         python_version: '3.9'
+  
+  post-message:
+    runs-on: ubuntu-latest
+    environment: main
+    needs: [build-packages]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: always()
+        with:
+          webhook_url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
 
 
