@@ -58,5 +58,6 @@ jobs:
         id: coverageComment
         with:
           title: ${{ inputs.working_directory }}
+          unique-id-for-comment: ${{ inputs.working_directory }}
           pytest-coverage-path: ./pytest-coverage.txt
           junitxml-path: ./pytest.xml
