@@ -54,9 +54,10 @@ jobs:
         run: |
           pytest --junitxml=pytest.xml --cov-report=term-missing --cov=${{ inputs.working_directory }}/src ${{ inputs.working_directory }}/tests/ | tee pytest-coverage.txt
       - name: Pytest coverage comment
-        uses: MishaKav/pytest-coverage-comment@v1.1.37
+        uses: MishaKav/pytest-coverage-comment@v1.1.40
         id: coverageComment
         with:
           title: ${{ inputs.working_directory }}
+          unique-id-for-comment: ${{ inputs.working_directory }}
           pytest-coverage-path: ./pytest-coverage.txt
           junitxml-path: ./pytest.xml
